@@ -1,0 +1,62 @@
+package lab12;
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        SharedResource sharedResource = new SharedResource();
+
+        MyThread1 obj1 = new MyThread1(sharedResource);
+        MyThread2 obj2 = new MyThread2(sharedResource);
+
+        obj1.start();
+        obj2.start();
+    }
+}
+
+class SharedResource {
+    private int[] a = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+    private int index = 0;
+
+    // Synchronized method to print odd numbers
+    public synchronized void printOdd() {
+        while (index < a.length) {
+            if (a[index] % 2 != 0) {
+                System.out.println(a[index] + " is odd number");
+            }
+            index++;
+        }
+    }
+
+    // Synchronized method to print even numbers
+    public synchronized void printEven() {
+        while (index < a.length) {
+            if (a[index] % 2 == 0) {
+                System.out.println(a[index] + " is even number");
+            }
+            index++;
+        }
+    }
+}
+
+class MyThread1 extends Thread {
+    private SharedResource sharedResource;
+
+    public MyThread1(SharedResource sharedResource) {
+        this.sharedResource = sharedResource;
+    }
+
+    public void run() {
+        sharedResource.printOdd();
+    }
+}
+
+class MyThread2 extends Thread {
+    private SharedResource sharedResource;
+
+    public MyThread2(SharedResource sharedResource) {
+        this.sharedResource = sharedResource;
+    }
+
+    public void run() {
+        sharedResource.printEven();
+    }
+}
